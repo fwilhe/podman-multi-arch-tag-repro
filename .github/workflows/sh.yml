@@ -14,7 +14,7 @@ jobs:
     - run: podman --version
     - run: podman manifest create --help
     - run: podman manifest add --help
-    - name: Run a multi-line script
+    - name: create manifest
       run: |
         set -x
         SHA=ccd9a9c3379f38f8352881c561a51842e1ad8357
@@ -23,4 +23,9 @@ jobs:
         podman pull ghcr.io/gardenlinux/builder:arm64-"$SHA"
         podman manifest create --all ghcr.io/gardenlinux/builder:$NEW_VERSION ghcr.io/gardenlinux/builder:amd64-"$SHA" ghcr.io/gardenlinux/builder:arm64-"$SHA"
         podman images
+    - name: image inspect
+      run: |
         podman image inspect ghcr.io/gardenlinux/builder:$NEW_VERSION
+    - name: manifest inspect
+      run: |
+        podman manifest inspect ghcr.io/gardenlinux/builder:$NEW_VERSION
