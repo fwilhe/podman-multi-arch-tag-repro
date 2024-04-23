@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - run: podman info
+    - run: podman --version
+    - run: podman manifest create --help
+    - run: podman manifest add --help
     - name: Run a multi-line script
       run: |
         SHA=ccd9a9c3379f38f8352881c561a51842e1ad8357
