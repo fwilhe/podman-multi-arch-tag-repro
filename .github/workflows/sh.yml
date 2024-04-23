@@ -33,4 +33,4 @@ jobs:
         podman manifest inspect ghcr.io/fwilhe/builder:$NEW_VERSION
     - name: manifest push
       run: |
-        podman manifest push ghcr.io/fwilhe/builder:$NEW_VERSION
+        podman manifest push ghcr.io/fwilhe/builder:$NEW_VERSION docker://ghcr.io/fwilhe/builder:$NEW_VERSION
