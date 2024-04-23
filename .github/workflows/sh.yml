@@ -8,8 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NEW_VERSION: v0.4
     steps:
     - uses: actions/checkout@v3
+    - run: podman login -u token -p ${{ github.token }} ghcr.io
     - run: podman info
     - run: podman --version
     - run: podman manifest create --help
@@ -18,16 +21,16 @@ jobs:
       run: |
         set -x
         SHA=ccd9a9c3379f38f8352881c561a51842e1ad8357
-        NEW_VERSION=v0.4
         podman pull ghcr.io/gardenlinux/builder:amd64-"$SHA"
         podman pull ghcr.io/gardenlinux/builder:arm64-"$SHA"
-        podman manifest create --all ghcr.io/gardenlinux/builder:$NEW_VERSION ghcr.io/gardenlinux/builder:amd64-"$SHA" ghcr.io/gardenlinux/builder:arm64-"$SHA"
+        podman manifest create ghcr.io/fwilhe/builder:$NEW_VERSION ghcr.io/gardenlinux/builder:amd64-"$SHA" ghcr.io/gardenlinux/builder:arm64-"$SHA"
         podman images
     - name: image inspect
       run: |
-        NEW_VERSION=v0.4
-        podman image inspect ghcr.io/gardenlinux/builder:$NEW_VERSION
+        podman image inspect ghcr.io/fwilhe/builder:$NEW_VERSION
     - name: manifest inspect
       run: |
-        NEW_VERSION=v0.4
-        podman manifest inspect ghcr.io/gardenlinux/builder:$NEW_VERSION
+        podman manifest inspect ghcr.io/fwilhe/builder:$NEW_VERSION
+    - name: manifest push
+      run: |
+        podman manifest push ghcr.io/fwilhe/builder:$NEW_VERSION
