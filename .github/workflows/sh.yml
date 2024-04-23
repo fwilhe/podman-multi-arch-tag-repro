@@ -1,0 +1,22 @@
+name: CI
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run a multi-line script
+      run: |
+        SHA=ccd9a9c3379f38f8352881c561a51842e1ad8357
+        NEW_VERSION=v0.4
+        podman pull ghcr.io/gardenlinux/builder:amd64-"$SHA"
+        podman pull ghcr.io/gardenlinux/builder:arm64-"$SHA"
+        podman manifest create ghcr.io/gardenlinux/builder:$NEW_VERSION
+        podman manifest add ghcr.io/gardenlinux/builder:$NEW_VERSION ghcr.io/gardenlinux/builder:amd64-"$SHA"
+        podman manifest add ghcr.io/gardenlinux/builder:$NEW_VERSION ghcr.io/gardenlinux/builder:arm64-"$SHA"
+        podman images
