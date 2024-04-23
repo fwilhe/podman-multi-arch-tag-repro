@@ -25,7 +25,9 @@ jobs:
         podman images
     - name: image inspect
       run: |
+        NEW_VERSION=v0.4
         podman image inspect ghcr.io/gardenlinux/builder:$NEW_VERSION
     - name: manifest inspect
       run: |
+        NEW_VERSION=v0.4
         podman manifest inspect ghcr.io/gardenlinux/builder:$NEW_VERSION
