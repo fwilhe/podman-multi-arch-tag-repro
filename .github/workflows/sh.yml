@@ -20,8 +20,6 @@ jobs:
         NEW_VERSION=v0.4
         podman pull ghcr.io/gardenlinux/builder:amd64-"$SHA"
         podman pull ghcr.io/gardenlinux/builder:arm64-"$SHA"
-        podman manifest create ghcr.io/gardenlinux/builder:$NEW_VERSION
-        podman manifest add ghcr.io/gardenlinux/builder:$NEW_VERSION ghcr.io/gardenlinux/builder:amd64-"$SHA"
-        podman manifest add ghcr.io/gardenlinux/builder:$NEW_VERSION ghcr.io/gardenlinux/builder:arm64-"$SHA"
+        podman manifest create ghcr.io/gardenlinux/builder:$NEW_VERSION ghcr.io/gardenlinux/builder:amd64-"$SHA ghcr.io/gardenlinux/builder:arm64-"$SHA"
         podman images
         podman image inspect ghcr.io/gardenlinux/builder:$NEW_VERSION
