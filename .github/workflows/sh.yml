@@ -22,9 +22,8 @@ jobs:
       run: |
         set -x
         SHA=ccd9a9c3379f38f8352881c561a51842e1ad8357
-        podman pull ghcr.io/gardenlinux/builder:amd64-"$SHA"
-        podman pull ghcr.io/gardenlinux/builder:arm64-"$SHA"
-        podman manifest create ghcr.io/fwilhe/builder:$NEW_VERSION ghcr.io/gardenlinux/builder:amd64-"$SHA" ghcr.io/gardenlinux/builder:arm64-"$SHA"
+        skopeo copy --multi-arch all ghcr.io/gardenlinux/builder:"$SHA" docker://ghcr.io/gardenlinux/builder:$NEW_VERSION
+
         podman images
     - name: image inspect
       run: |
@@ -32,6 +31,3 @@ jobs:
     - name: manifest inspect
       run: |
         podman manifest inspect ghcr.io/fwilhe/builder:$NEW_VERSION
-    - name: manifest push
-      run: |
-        podman manifest push ghcr.io/fwilhe/builder:$NEW_VERSION docker://ghcr.io/fwilhe/builder:$NEW_VERSION
