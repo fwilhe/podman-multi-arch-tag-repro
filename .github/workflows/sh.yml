@@ -18,12 +18,15 @@ jobs:
     - run: podman --version
     - run: podman manifest create --help
     - run: podman manifest add --help
+    - run: podman run docker://quay.io/skopeo/stable:latest --version
+    - run: skopeo --version
     - name: create manifest
       run: |
         set -x
         SHA=ccd9a9c3379f38f8352881c561a51842e1ad8357
-        skopeo copy --multi-arch all docker://ghcr.io/gardenlinux/builder:$SHA docker://ghcr.io/gardenlinux/builder:$NEW_VERSION
-        podman images
+        skopeo login -u token -p ${{ github.token }} ghcr.io
+        # Run skopeo in a container to get the latest version
+        podman run -v ${XDG_RUNTIME_DIR}/containers/auth.json:/auth.json docker://quay.io/skopeo/stable:latest copy --multi-arch all docker://ghcr.io/gardenlinux/builder:"$SHA" ghcr.io/fwilhe/builder:$NEW_VERSION
     - name: image inspect
       run: |
         podman image inspect ghcr.io/fwilhe/builder:$NEW_VERSION
