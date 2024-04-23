@@ -22,8 +22,7 @@ jobs:
       run: |
         set -x
         SHA=ccd9a9c3379f38f8352881c561a51842e1ad8357
-        skopeo copy --all ghcr.io/gardenlinux/builder:$SHA ghcr.io/gardenlinux/builder:$NEW_VERSION
-
+        podman run docker://quay.io/skopeo/stable:latest copy --multi-arch all ghcr.io/gardenlinux/builder:$SHA ghcr.io/gardenlinux/builder:$NEW_VERSION
         podman images
     - name: image inspect
       run: |
